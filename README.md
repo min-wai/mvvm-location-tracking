@@ -1,1 +1,1 @@
-# mvvm-location-tracking
+Location Tracking using android architecture components
