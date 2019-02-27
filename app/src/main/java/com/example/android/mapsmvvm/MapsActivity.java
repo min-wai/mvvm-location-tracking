@@ -74,12 +74,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void startLocationUpdates() {
-        observeLocationLiveData();
         myViewModel.requestLocationUpdates();
         startForegroundService();
     }
 
     private void stopLocationUpdates() {
+        marker.remove();
+        marker = null;
         myViewModel.removeLocationUpdates();
         stopForegroundService();
     }
@@ -117,6 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
+        observeLocationLiveData();
     }
 
     private void confirmPermissionAndGetMap(final SupportMapFragment mapFragment) {
