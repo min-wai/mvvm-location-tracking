@@ -114,6 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (marker == null) {
                     marker = mMap.addMarker(new MarkerOptions().position(latLng).title("Nibba"));
+                    marker.setVisible(myViewModel.getTrackingState().getValue());
                 } else {
                     marker.setPosition(latLng);
                 }
