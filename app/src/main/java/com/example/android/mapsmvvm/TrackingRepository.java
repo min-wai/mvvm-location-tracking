@@ -10,7 +10,11 @@ import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -32,10 +36,18 @@ public class TrackingRepository {
         return ourInstance;
     }
 
+    @SuppressLint("MissingPermission")
     private TrackingRepository(Context applicationContext) {
         // Init
         trackingState.setValue(false);
-        mFusedLocationProviderClient = new FusedLocationProviderClient(applicationContext);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(applicationContext);
+        mFusedLocationProviderClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        locationLiveData.setValue(location);
+                    }
+                });
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(12 * 1000)

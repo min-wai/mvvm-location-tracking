@@ -21,30 +21,25 @@ public class LocationService extends LifecycleService {
     @Override
     public void onCreate() {
         super.onCreate();
-        myViewModel = new MyViewModel(getApplication());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopForeground(true);
+//        stopForeground(true);
 //        stopSelf();
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        startForeground();
+        createNotificationChannel();
+        startForeground(NOTIFICATION_ID, getMyNotification(""));
+        myViewModel = new MyViewModel(getApplication());
         startObservingLocationLivedata();
         return START_STICKY;
     }
-
-    private void startForeground() {
-        createNotificationChannel();
-        startForeground(NOTIFICATION_ID, getMyNotification(""));
-    }
-
-
 
     private void startObservingLocationLivedata() {
         myViewModel.getLocationLiveData().observe(this, new Observer<Location>() {
